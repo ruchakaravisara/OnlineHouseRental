@@ -1,7 +1,7 @@
 import express from 'express';
-import dotenv from 'dotenv'
-import cors from 'cors'
-import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv';
+import cors from 'cors';
+import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import { UserRouter } from './routes/UserAuth.js';
@@ -9,20 +9,30 @@ import { UserRouter } from './routes/UserAuth.js';
 dotenv.config();
 
 const app = express();
+
+// Middleware
 app.use(express.json());
-app.use(cors()); 
 
-// app.get('/', (req, res) => {
-//   res.send('Hello World!');
-// });
-app.use('/auth',UserRouter)
+// CORS Configuration
+app.use(cors({
+  origin: ["http://localhost:3000"],
+  credentials: true
+}))
 
-mongoose.connect(process.env.MONGO_URL).then(()=>{
-  console.log('mongodb connected')
-  app.listen(process.env.PORT, () => {
-    console.log(' app listening on port 4000!');
+app.use(cookieParser());
+// Routes
+app.use('/auth', UserRouter);
+
+// MongoDB Connection
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then(() => {
+    console.log('MongoDB connected');
+    // Start the server
+    app.listen(process.env.PORT, () => {
+      console.log(`Server is running on port ${process.env.PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('MongoDB connection error:', err);
   });
-}).catch((err)=>{
-  console.log(err);
-})
-
