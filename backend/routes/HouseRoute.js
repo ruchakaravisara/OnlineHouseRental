@@ -54,7 +54,20 @@ router.get('/house/:id',async(req,res)=>{
 })
 //update
 router.put('/house/:id',async(req,res)=>{
-    
+    try {
+        if(!req.body.topic || !req.body.price || !req.body.bedrooms || !req.body.address || !req.body.bathrooms || !req.body.description || !req.body.contactno || !req.body.Image){
+            return res.status(400).send({message: "Please enter all information"});
+        }
+        const {id} =req.params
+        const result = await House.findByIdAndUpdate(id,req.body)
+        if(!result){
+            return res.status(404).json({message: "House not found"})
+        }
+        return res.status(200).send({message:"house updated"});
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({message:error})
+    }
 })
 //delete
 
