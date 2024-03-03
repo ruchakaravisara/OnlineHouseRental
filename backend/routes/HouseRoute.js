@@ -53,7 +53,9 @@ router.get('/house/:id',async(req,res)=>{
     }
 })
 //update
-
+router.put('/house/:id',async(req,res)=>{
+    
+})
 //delete
 
 export { router as HouseRouter };
