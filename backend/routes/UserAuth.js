@@ -16,8 +16,8 @@ router.post('/register',async(req,res)=>{
     const hashpassword = await bcryt.hash(password,10);
     const newUser = new User({
         name,
-        email:hashpassword,
-        password
+        email,
+        password:hashpassword
     })
     await newUser.save();
     return res.json({status:true,message:"User registered"})
