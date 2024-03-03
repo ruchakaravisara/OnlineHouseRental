@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import { UserRouter } from "./routes/UserAuth.js";
+import { HouseRouter } from "./routes/HouseRoute.js";
 
 
 dotenv.config();
@@ -25,6 +26,7 @@ app.use(
 app.use(cookieParser());
 // Routes
 app.use("/auth", UserRouter);
+app.use("/", HouseRouter);
 
 
 // MongoDB Connection
