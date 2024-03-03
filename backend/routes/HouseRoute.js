@@ -29,9 +29,29 @@ router.post('/house',async (req,res)=>{
     }
 })
 //getall
-
+router.get('/house',async(req,res)=>{
+    try {
+        const house = await House.find({})
+        return res.status(200).json(
+           { count: house.length,
+            data: house}
+        );
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({message:error})
+    }
+})
 //getbyid
-
+router.get('/house/:id',async(req,res)=>{
+    try {
+        const {id} =req.params
+        const house = await House.findById(id)
+        return res.status(200).json(house);
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({message:error})
+    }
+})
 //update
 
 //delete
