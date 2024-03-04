@@ -1,5 +1,6 @@
 import express from "express";
 import { House } from "../models/HouseModule.js";
+import { User } from "../models/Users.js";
 const router = express.Router();
 
 //post
@@ -82,6 +83,18 @@ router.delete('/house/:id',async(req,res)=>{
     } catch (error) {
         console.log(error)
         res.status(500).send({message:error})
+    }
+})
+
+router.put("/save",async(req,res)=>{
+    try {
+        const house = await House.findById(req.body.houseId)
+        const user = await User.findById(req.body.userId)
+        user.savedHouse.push(house);
+        await user.save();
+        res.json({savedHouse:user.savedHouse})
+    } catch (error) {
+        res.json(error)
     }
 })
 
