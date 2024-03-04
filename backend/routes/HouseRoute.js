@@ -55,7 +55,7 @@ router.get('/house/:id',async(req,res)=>{
     }
 })
 //update
-router.put('/house/:id',async(req,res)=>{
+router.put('/housee/:id',async(req,res)=>{
     try {
         if(!req.body.topic || !req.body.price || !req.body.bedrooms || !req.body.address || !req.body.bathrooms || !req.body.description || !req.body.contactno || !req.body.Image || !req.body.userOwner){
             return res.status(400).send({message: "Please enter all information"});
@@ -124,5 +124,58 @@ router.get("/savedHouse/ids/:userId", async (req, res) => {
     }
   });
   
+  // Get houses entered by the owner
+router.get('/houses/user/:userID', async (req, res) => {
+    try {
+        const { userID } = req.params;
+        const houses = await House.find({ userOwner: userID });
+        res.status(200).json(houses);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error fetching houses entered by the owner." });
+    }
+});
 
+// Update house entered by the owner
+router.put('/house/:id', async (req, res) => {
+    
+    try {
+        const { id } = req.params;
+        const house = await House.findById(id);
+        if (!house) {
+            return res.status(404).json({ message: "House not found" });
+        }
+        if (house.userOwner !== req.body.userOwner) {
+            return res.status(403).json({ message: "You are not authorized to update this house." });
+        }
+        const updatedHouse = await House.findByIdAndUpdate(id, req.body, { new: true });
+        res.status(200).json(updatedHouse);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error updating house." });
+    }
+});
+
+// Delete house entered by the owner
+router.delete('/house/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const house = await House.findById(id);
+        if (!house) {
+            return res.status(404).json({ message: "House not found" });
+        }
+        if (house.userOwner !== req.body.userOwner) {
+            return res.status(403).json({ message: "You are not authorized to delete this house." });
+        }
+        await House.findByIdAndDelete(id);
+        res.status(200).json({ message: "House deleted successfully." });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error deleting house." });
+    }
+});
+
+
+  
+  
 export { router as HouseRouter };

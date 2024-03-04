@@ -23,9 +23,10 @@ app.use(
   })
 );
 
+
 app.use(cookieParser());
 // Routes
-app.use("/auth", UserRouter);
+app.use("/auth", UserRouter); 
 app.use("/", HouseRouter);
 
 
