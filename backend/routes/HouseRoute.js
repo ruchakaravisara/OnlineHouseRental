@@ -70,5 +70,18 @@ router.put('/house/:id',async(req,res)=>{
     }
 })
 //delete
+router.delete('/house/:id',async(req,res)=>{
+    try {
+        const {id} =req.params
+        const result = await House.findByIdAndDelete(id)
+        if(!result){
+            return res.status(404).json({message: "House not found"})
+        }
+        return res.status(200).send({message:"house deleted"});
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({message:error})
+    }
+})
 
 export { router as HouseRouter };
