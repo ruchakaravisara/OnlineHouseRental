@@ -85,7 +85,7 @@ router.delete('/house/:id',async(req,res)=>{
         res.status(500).send({message:error})
     }
 })
-
+// Save a house
 router.put("/save",async(req,res)=>{
     try {
         const house = await House.findById(req.body.houseId)
@@ -97,5 +97,32 @@ router.put("/save",async(req,res)=>{
         res.json(error)
     }
 })
+// Get id of saved house
+router.get("/savedHouse/ids/:userId", async (req, res) => {
+    try {
+      const user = await User.findById(req.params.userId);
+      res.status(201).json({ savedHouse: user?.savedHouse });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  });
+  
+  // Get saved house
+  router.get("/savedHouse/:userId", async (req, res) => {
+    try {
+      const user = await User.findById(req.params.userId);
+      const savedHouse = await House.find({
+        _id: { $in: user.savedHouse },
+      });
+  
+      console.log(savedHouse);
+      res.status(201).json({ savedHouse });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  });
+  
 
 export { router as HouseRouter };
