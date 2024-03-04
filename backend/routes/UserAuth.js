@@ -33,9 +33,9 @@ router.post("/login", async (req, res) => {
     return res.json({ message: "password is incorrect" });
   }
 
-  const token = jwt.sign({ email: email }, process.env.KEY);
+  const token = jwt.sign({ id :user._id }, process.env.KEY);
  //res.cookie("token", token, { httpOnly: true, maxAge: 360000 });
-  return res.json({ status: true, message: "login successfully" });
+  return res.json({ token,userID:user._id, status: true, message: "login successfully" });
 });
 
 export { router as UserRouter };
