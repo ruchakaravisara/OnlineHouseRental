@@ -4,6 +4,19 @@ import mongoose from "mongoose";
 import bcryt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+
+
+const plainTextPassword = 'password123';
+const saltRounds = 10;
+
+bcryt.hash(plainTextPassword, saltRounds, (err, hash) => {
+  if (err) {
+    console.error('Error hashing password:', err);
+    return;
+  }
+  console.log('Hashed password:', hash);
+});
+
 const router = express.Router();
 
 router.post("/register", async (req, res) => {
