@@ -6,7 +6,7 @@ const router = express.Router();
 router.post('/house',async (req,res)=>{
     try{
 
-        if(!req.body.topic || !req.body.price || !req.body.bedrooms || !req.body.address || !req.body.bathrooms || !req.body.description || !req.body.contactno || !req.body.Image){
+        if(!req.body.topic || !req.body.price || !req.body.bedrooms || !req.body.address || !req.body.bathrooms || !req.body.description || !req.body.contactno || !req.body.Image ||!req.body.userOwner){
             return res.status(400).send({message: "Please enter all information"});
         }
 
@@ -18,7 +18,8 @@ router.post('/house',async (req,res)=>{
             bathrooms:req.body.bathrooms,
             description:req.body.description,
             contactno:req.body.contactno,
-            Image:req.body.Image
+            Image:req.body.Image,
+            userOwner:req.body.userOwner
         }
         const house  =await House.create(newHouse)
        return res.status(200).send(house)
@@ -55,7 +56,7 @@ router.get('/house/:id',async(req,res)=>{
 //update
 router.put('/house/:id',async(req,res)=>{
     try {
-        if(!req.body.topic || !req.body.price || !req.body.bedrooms || !req.body.address || !req.body.bathrooms || !req.body.description || !req.body.contactno || !req.body.Image){
+        if(!req.body.topic || !req.body.price || !req.body.bedrooms || !req.body.address || !req.body.bathrooms || !req.body.description || !req.body.contactno || !req.body.Image || !req.body.userOwner){
             return res.status(400).send({message: "Please enter all information"});
         }
         const {id} =req.params

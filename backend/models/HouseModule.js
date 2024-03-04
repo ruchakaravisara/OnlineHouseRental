@@ -33,7 +33,9 @@ const HouseSchema = new mongoose.Schema({
           Image:{
             type: String,
             required: true,
-          }
+          },
+
+        userOwner:{type:mongoose.Schema.Types.ObjectId ,ref:"users",required:true}
           
       
 }) 
