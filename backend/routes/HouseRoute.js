@@ -137,24 +137,38 @@ router.get('/houses/user/:userID', async (req, res) => {
 });
 
 // Update house entered by the owner
+
 router.put('/house/:id', async (req, res) => {
-    
     try {
         const { id } = req.params;
+        const updates = req.body;
+
+        // Validate if the user is authorized to update this house
         const house = await House.findById(id);
         if (!house) {
-            return res.status(404).json({ message: "House not found" });
+            return res.status(404).json({ message: 'House not found' });
         }
-        if (house.userOwner !== req.body.userOwner) {
-            return res.status(403).json({ message: "You are not authorized to update this house." });
+        if (house.userOwner.toString() !== updates.userOwner) {
+            return res.status(403).json({ message: 'You are not authorized to update this house' });
         }
-        const updatedHouse = await House.findByIdAndUpdate(id, req.body, { new: true });
-        res.status(200).json(updatedHouse);
+
+        // Update only the fields that are allowed to be updated
+        const allowedUpdates = ['topic', 'price', 'bedrooms', 'address', 'bathrooms', 'description', 'contactno', 'Image'];
+        Object.keys(updates).forEach((update) => {
+            if (allowedUpdates.includes(update)) {
+                house[update] = updates[update];
+            }
+        });
+
+        // Save the updated house
+        await house.save();
+        res.status(200).json(house);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Error updating house." });
+        res.status(500).json({ message: 'Error updating house' });
     }
 });
+
 
 // Delete house entered by the owner
 router.delete('/house/:id', async (req, res) => {
