@@ -7,7 +7,6 @@ import mongoose from "mongoose";
 import { UserRouter } from "./routes/UserAuth.js";
 import { HouseRouter } from "./routes/HouseRoute.js";
 
-
 dotenv.config();
 
 const app = express();
@@ -23,12 +22,10 @@ app.use(
   })
 );
 
-
 app.use(cookieParser());
 // Routes
-app.use("/auth", UserRouter); 
+app.use("/auth", UserRouter);
 app.use("/", HouseRouter);
-
 
 // MongoDB Connection
 mongoose

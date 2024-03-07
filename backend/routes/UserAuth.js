@@ -4,17 +4,15 @@ import mongoose from "mongoose";
 import bcryt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-
-
-const plainTextPassword = 'password123';
+const plainTextPassword = "password123";
 const saltRounds = 10;
 
 bcryt.hash(plainTextPassword, saltRounds, (err, hash) => {
   if (err) {
-    console.error('Error hashing password:', err);
+    console.error("Error hashing password:", err);
     return;
   }
-  console.log('Hashed password:', hash);
+  console.log("Hashed password:", hash);
 });
 
 const router = express.Router();
@@ -46,9 +44,14 @@ router.post("/login", async (req, res) => {
     return res.json({ message: "password is incorrect" });
   }
 
-  const token = jwt.sign({ id :user._id }, process.env.KEY);
- //res.cookie("token", token, { httpOnly: true, maxAge: 360000 });
-  return res.json({ token,userID:user._id, status: true, message: "login successfully" });
+  const token = jwt.sign({ id: user._id }, process.env.KEY);
+  //res.cookie("token", token, { httpOnly: true, maxAge: 360000 });
+  return res.json({
+    token,
+    userID: user._id,
+    status: true,
+    message: "login successfully",
+  });
 });
 
 export { router as UserRouter };
